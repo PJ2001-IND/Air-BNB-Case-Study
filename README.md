@@ -4,7 +4,6 @@
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange?style=flat-square&logo=jupyter)
 ![Tableau](https://img.shields.io/badge/Tableau-Dashboard-lightblue?style=flat-square&logo=tableau)
 ![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?style=flat-square&logo=pandas)
-![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)
 
 > A comprehensive case study and exploratory data analysis on **Airbnb listings across New York City (2019)** — uncovering pricing dynamics, neighbourhood demand patterns, host behaviour, and availability trends through Python-based EDA and an interactive Tableau dashboard.
 
@@ -171,12 +170,6 @@ Open `AIR BNB CASE STUDY.twb` in **Tableau Desktop** or upload to **Tableau Publ
 **Praasuk Jain**
 - GitHub: [@PJ2001-IND](https://github.com/PJ2001-IND)
 - LinkedIn: [praasuk-jain](https://www.linkedin.com/in/praasuk-jain-425b6b1a3/)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
 
 ---
 
