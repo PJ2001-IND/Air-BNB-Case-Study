@@ -1,105 +1,154 @@
-# 🏠 Airbnb New York City — Case Study & EDA
+# 🏠 Airbnb NYC 2019 — Case Study (EDA + Tableau Dashboard)
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square&logo=python)
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange?style=flat-square&logo=jupyter)
-![Tableau](https://img.shields.io/badge/Tableau-Dashboard-lightblue?style=flat-square&logo=tableau)
-![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?style=flat-square&logo=pandas)
+![Tableau](https://img.shields.io/badge/Tableau-Dashboard-E97627?style=flat-square&logo=tableau)
+![Pandas](https://img.shields.io/badge/Pandas-EDA-150458?style=flat-square&logo=pandas)
+![Seaborn](https://img.shields.io/badge/Seaborn-Visualisation-4C72B0?style=flat-square)
+![License](https://img.shields.io/badge/License-Academic-lightgrey?style=flat-square)
 
-> A comprehensive case study and exploratory data analysis on **Airbnb listings across New York City (2019)** — uncovering pricing dynamics, neighbourhood demand patterns, host behaviour, and availability trends through Python-based EDA and an interactive Tableau dashboard.
+> An end-to-end **Exploratory Data Analysis (EDA) and Tableau dashboard case study** on the New York City Airbnb 2019 dataset — covering 48,895 listings across all 5 NYC boroughs. The study uncovers pricing patterns, host behaviour, room type distributions, neighbourhood demand, and review trends, with the cleaned data exported to power an 11-sheet interactive Tableau workbook.
 
 ---
 
 ## 📌 Problem Statement
 
-Airbnb operates in a highly dynamic, location-sensitive market where pricing and availability vary dramatically across neighbourhoods, room types, and host strategies. This case study analyses NYC Airbnb listing data to answer key business questions:
+The short-term rental market in New York City is one of the most competitive in the world. With nearly 49,000 listings in 2019 spanning Manhattan, Brooklyn, Queens, the Bronx, and Staten Island, understanding what drives pricing, availability, and demand is critical for hosts, guests, and business analysts alike. This case study performs a structured EDA on the NYC Airbnb 2019 dataset to uncover:
 
-- Which neighbourhoods command the highest prices — and why?
-- What room types dominate different boroughs?
-- How do host activity levels affect listing performance?
-- What patterns exist in availability and minimum nights policies?
-- Are there outliers or anomalies that suggest data quality issues or pricing errors?
+- **Which neighbourhoods and room types command the highest prices?**
+- **How do host listing counts, availability, and reviews vary across boroughs?**
+- **What are the outlier patterns in price and minimum nights, and how should they be treated?**
 
 ---
 
-## 🎯 Objective
+## 🎯 Objectives
 
-- Perform thorough EDA on 48,000+ Airbnb listings across New York City
-- Clean and preprocess raw listing data (handle nulls, outliers, and inconsistencies)
-- Analyse pricing by neighbourhood, room type, borough, and host characteristics
-- Visualise geographic distribution of listings and pricing hotspots
-- Present findings through an interactive **Tableau dashboard**
+- Perform end-to-end data cleaning and exploratory analysis on the NYC Airbnb 2019 dataset
+- Identify and treat outliers in `price` and `minimum_nights` using quantile-based capping (99.7th percentile)
+- Analyse pricing, availability, reviews, and host behaviour across all 5 NYC neighbourhood groups
+- Export the cleaned dataset (`AB_NYC_2019_Updated.csv`) for Tableau visualisation
+- Build an **11-sheet Tableau dashboard** covering price, reviews, availability, room type, and host analytics
 
 ---
 
 ## 📂 Dataset
 
-| File | Description |
+| Property | Detail |
 |---|---|
-| `AB_NYC_2019.csv` | Raw Airbnb NYC listings dataset (2019) |
-| `AB_NYC_2019_Updated.csv` | Cleaned and preprocessed version used for analysis |
+| File | `AB_NYC_2019.csv` |
+| Source | Airbnb NYC — publicly available 2019 listings data |
+| Records | 48,895 listings |
+| Features | 16 columns |
+| Coverage | All 5 NYC boroughs — Manhattan, Brooklyn, Queens, Bronx, Staten Island |
+| Unique Neighbourhoods | 221 |
+| Unique Hosts | 37,457 |
+| Price Range | \$0 — \$10,000/night (mean: \$152.72, median: \$106) |
+| Avg. Availability | 112.78 days/year |
 
-### Key Features:
-- **Listing Info**: Name, host ID, host name, neighbourhood group (borough), neighbourhood
-- **Location**: Latitude, longitude (enables geospatial mapping)
-- **Room Type**: Entire home/apt, Private room, Shared room
-- **Pricing**: Price per night, minimum nights, service fee
-- **Activity**: Number of reviews, reviews per month, last review date
-- **Availability**: Availability (days per year), calculated host listings count
+### Dataset Columns
+
+| Column | Description |
+|---|---|
+| `id` | Unique listing ID — dropped before analysis |
+| `name` | Listing name — dropped before analysis |
+| `host_id` | Unique host identifier |
+| `host_name` | Host name |
+| `neighbourhood_group` | NYC borough (Manhattan: 21,661 / Brooklyn: 20,104 / Queens: 5,666 / Bronx: 1,091 / Staten Island: 373) |
+| `neighbourhood` | Specific neighbourhood (221 unique) |
+| `latitude` / `longitude` | Geolocation coordinates |
+| `room_type` | Entire home/apt (25,409) / Private room (22,326) / Shared room (1,160) |
+| `price` | Nightly price in USD |
+| `minimum_nights` | Minimum booking duration (max: 1,250 nights) |
+| `number_of_reviews` | Total number of guest reviews |
+| `last_review` | Date of last review — dropped (10,052 nulls) |
+| `reviews_per_month` | Average monthly reviews (10,052 nulls → filled with 0) |
+| `calculated_host_listings_count` | Number of listings per host |
+| `availability_365` | Days available per year (0–365) |
 
 ---
 
-## 🔬 Analysis Pipeline
+## 🔬 Methodology
 
 ```
-AB_NYC_2019.csv (Raw)
-        │
-        ▼
-Data Cleaning & Preprocessing
-        │   ├── Handle null values (name, host name, reviews)
-        │   ├── Remove extreme price outliers (e.g. $0 or >$10,000/night)
-        │   ├── Parse and validate date columns
-        │   └── Save → AB_NYC_2019_Updated.csv
-        │
-        ▼
-Univariate Analysis
-        │   ├── Price distribution (heavily right-skewed)
-        │   ├── Room type frequency across NYC
-        │   ├── Neighbourhood group (borough) listing counts
-        │   └── Availability distribution
-        │
-        ▼
-Bivariate Analysis
-        │   ├── Price by room type
-        │   ├── Price by neighbourhood group (Manhattan vs others)
-        │   ├── Reviews per month vs price
-        │   ├── Minimum nights policy patterns
-        │   └── Host listing count vs price (multi-listing hosts)
-        │
-        ▼
-Geospatial Analysis
-        │   ├── Map of listings by lat/long coloured by price
-        │   ├── Heatmap of listing density by borough
-        │   └── Neighbourhood-level price hotspot identification
-        │
-        ▼
-Tableau Dashboard
-                ├── Interactive borough & neighbourhood price explorer
-                ├── Room type breakdown by area
-                ├── Availability heatmap
-                └── Top hosts by listing count
+AB_NYC_2019.csv (48,895 records, 16 columns)
+   │
+   ▼
+Data Understanding & Initial Inspection
+   │   ├── Shape, dtypes, null counts, duplicate check
+   │   ├── Unique value counts per column
+   │   └── Null percentage audit — last_review (20.56%), reviews_per_month (20.56%)
+   │
+   ▼
+Data Cleaning
+   │   ├── Drop redundant columns: id, name, last_review
+   │   └── Fill reviews_per_month nulls with 0
+   │       (listings with 0 reviews have no monthly review rate)
+   │
+   ▼
+Exploratory Data Analysis (EDA)
+   │   ├── Numerical Variables Analysis
+   │   │     ├── Descriptive stats — price, minimum_nights, reviews, availability
+   │   │     ├── Pairplot — numeric features cross-correlation
+   │   │     └── Correlation heatmap (upper triangle, YlGnBu palette)
+   │   │
+   │   ├── Outlier Detection & Treatment
+   │   │     ├── Price: boxplot → quantile binning → drop above 99.7th percentile
+   │   │     │     (price capped at $1,500 — 273 extreme rows removed)
+   │   │     ├── Minimum Nights: boxplot → quantile binning → drop above 99.7th percentile
+   │   │     └── Replot boxplots + distplots after treatment
+   │   │
+   │   └── Categorical Variables Analysis
+   │         ├── Countplots — room_type vs neighbourhood_group
+   │         ├── Unique value inspection — neighbourhood (221), room_type (3), group (5)
+   │         └── Value counts — neighbourhood_group, neighbourhood, room_type
+   │
+   ▼
+Export Cleaned Data
+   │   └── df.to_csv("AB_NYC_2019_Updated.csv")
+   │       → 48,622 records, 14 columns (273 outlier rows removed)
+   │
+   ▼
+Tableau Dashboard (AIR_BNB_CASE_STUDY.twb — 11 sheets)
+       ├── Price Analyses Per Night
+       ├── Avg. Price Neighbourhood Distribution
+       ├── Average Price Vs Neighbourhood Group
+       ├── Room Type Price Analysis
+       ├── Minimum Nights Vs Host Listing
+       ├── Host Vs Availability 365
+       ├── Max. Reviews Vs Host
+       ├── Number Of Host Listing Per Housing Type
+       ├── Number Of Reviews Per Listing
+       ├── No. Of Listing Per Neighbourhood Group And Avg. Review Per Month
+       └── By Neighbourhood Group
 ```
+
+---
+
+## 📊 Results
+
+| Metric | Value |
+|---|---|
+| Raw Records | 48,895 listings |
+| Cleaned Records | 48,622 listings (273 outlier rows removed) |
+| Price after cleaning | Max capped at \$1,500 (mean: \$143.60) |
+| Minimum Nights after cleaning | Capped at 99.7th percentile |
+| Null values after cleaning | 0 (except host_name: 21) |
+| Tableau Sheets | 11 interactive visualisations |
+
+> 📝 *Refer to `AIR_BNB_CASE_STUDY.ipynb` for full EDA code, boxplots, distribution plots, pairplots, and correlation heatmaps. Open `AIR_BNB_CASE_STUDY.twb` in Tableau Desktop to explore the interactive 11-sheet dashboard.*
 
 ---
 
 ## 💡 Key Insights
 
-- **Manhattan dominates pricing**: Median prices in Manhattan are significantly higher than other boroughs, driven by central location and entire-home listings
-- **Room type is the strongest price predictor**: Entire home/apt listings cost nearly 2x private rooms across all boroughs
-- **Brooklyn is the volume leader**: Brooklyn has the highest number of listings — a competitive market with more mid-range pricing
-- **Price distribution is heavily skewed**: Most listings cluster below $200/night, but extreme outliers (>$1,000) exist and require removal for meaningful analysis
-- **Multi-listing hosts behave differently**: Hosts with 10+ listings price more competitively and maintain higher availability — suggesting professional property management
-- **Reviews correlate inversely with price**: Budget listings tend to have more reviews, suggesting higher booking frequency at lower price points
-- **Shared rooms are a tiny market segment**: Despite being the cheapest option, shared rooms represent a very small fraction of total listings
+- **Manhattan commands the highest prices** — significantly above all other boroughs, driven by Entire home/apt listings in premium neighbourhoods
+- **Brooklyn is the most active borough** after Manhattan with 20,104 listings, offering more affordable pricing
+- **Entire home/apt is the dominant room type** (25,409 listings — 51.97%), followed closely by Private room (22,326 — 45.66%)
+- **Price outliers are extreme** — before cleaning, prices ranged from \$0 to \$10,000/night; after 99.7th percentile capping they are capped at \$1,500
+- **Minimum nights also has extreme outliers** — some listings require up to 1,250 nights; treated with same 99.7th percentile approach
+- **10,052 listings (20.56%)** have never received a review — reflected by null `last_review` and `reviews_per_month`, correctly filled with 0
+- **High host listing count** does not correlate strongly with higher prices — indicates professional hosts operate across price ranges
+- The Tableau dashboard reveals **geographical clustering** of high-price listings in lower Manhattan, with availability and review patterns varying significantly by borough
 
 ---
 
@@ -107,12 +156,12 @@ Tableau Dashboard
 
 | Tool | Purpose |
 |---|---|
-| Python | Core programming language |
-| Pandas | Data loading, cleaning, and manipulation |
-| NumPy | Numerical operations |
-| Matplotlib / Seaborn | Statistical visualisations and heatmaps |
-| Tableau | Interactive geographic and business dashboard |
-| Jupyter Notebook | Interactive analysis environment |
+| Python 3.8+ | Core programming language |
+| Pandas | Data loading, cleaning, null handling, outlier treatment, CSV export |
+| NumPy | Numerical operations and array masking |
+| Matplotlib / Seaborn | EDA visualisations — boxplots, distplots, pairplots, countplots, heatmaps |
+| Jupyter Notebook | Interactive EDA development environment |
+| Tableau Desktop | 11-sheet interactive dashboard on cleaned dataset |
 
 ---
 
@@ -134,12 +183,17 @@ git clone https://github.com/PJ2001-IND/Air-BNB-Case-Study.git
 cd Air-BNB-Case-Study
 
 # Launch Jupyter Notebook
-jupyter notebook "AIR BNB CASE STUDY.ipynb"
+jupyter notebook AIR_BNB_CASE_STUDY.ipynb
 ```
 
-### View the Dashboard
+### Open the Tableau Dashboard
 
-Open `AIR BNB CASE STUDY.twb` in **Tableau Desktop** or upload to **Tableau Public** for the interactive dashboard experience.
+```
+1. Open Tableau Desktop
+2. Open AIR_BNB_CASE_STUDY.twb
+3. Ensure AB_NYC_2019_Updated.csv is in the same directory as the .twb file
+4. Explore all 11 dashboard sheets
+```
 
 ---
 
@@ -147,10 +201,11 @@ Open `AIR BNB CASE STUDY.twb` in **Tableau Desktop** or upload to **Tableau Publ
 
 ```
 📦 Air-BNB-Case-Study
- ┣ 📓 AIR BNB CASE STUDY.ipynb          # Full EDA and analysis notebook
- ┣ 📊 AIR BNB CASE STUDY.twb            # Interactive Tableau dashboard
- ┣ 📄 AB_NYC_2019.csv                   # Raw dataset
- ┣ 📄 AB_NYC_2019_Updated.csv           # Cleaned dataset
+ ┣ 📓 AIR_BNB_CASE_STUDY.ipynb          # Full EDA pipeline and data cleaning notebook
+ ┣ 📊 AIR_BNB_CASE_STUDY.twb            # Tableau workbook — 11-sheet interactive dashboard
+ ┣ 📄 AB_NYC_2019.csv                   # Raw Airbnb NYC 2019 dataset (48,895 records, 16 features)
+ ┣ 📄 AB_NYC_2019_Updated.csv           # Cleaned dataset exported from notebook (48,622 records, 14 features)
+ ┣ 📄 requirements.txt                  # Python dependencies
  ┗ 📄 README.md                         # Project documentation
 ```
 
@@ -158,10 +213,12 @@ Open `AIR BNB CASE STUDY.twb` in **Tableau Desktop** or upload to **Tableau Publ
 
 ## 🔭 Future Scope
 
-- Build a **price prediction model** using neighbourhood, room type, and availability as features
-- Add **sentiment analysis** on listing reviews to correlate guest experience with pricing
-- Expand to **multi-year NYC data** to track how Airbnb listings and prices changed post-COVID
-- Deploy an interactive **Streamlit pricing estimator** for hosts to benchmark their listing price
+- Build a **price prediction model** using the cleaned dataset — Linear Regression or XGBoost on neighbourhood, room type, and availability features
+- Extend the Tableau dashboard with **geospatial mapping** of listing density and price heatmaps across NYC zip codes
+- Incorporate **time-series analysis** using review dates to track demand seasonality across months
+- Apply **clustering (K-Means)** to segment listings into tiers — budget, mid-range, premium — for targeted host and guest recommendations
+- Integrate **live Airbnb data** via the Inside Airbnb API for real-time market tracking
+- Deploy insights as a **Streamlit web app** for interactive neighbourhood and price exploration
 
 ---
 
