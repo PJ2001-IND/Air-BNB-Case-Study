@@ -5,7 +5,6 @@
 ![Tableau](https://img.shields.io/badge/Tableau-Dashboard-E97627?style=flat-square&logo=tableau)
 ![Pandas](https://img.shields.io/badge/Pandas-EDA-150458?style=flat-square&logo=pandas)
 ![Seaborn](https://img.shields.io/badge/Seaborn-Visualisation-4C72B0?style=flat-square)
-![License](https://img.shields.io/badge/License-Academic-lightgrey?style=flat-square)
 
 > An end-to-end **Exploratory Data Analysis (EDA) and Tableau dashboard case study** on the New York City Airbnb 2019 dataset — covering 48,895 listings across all 5 NYC boroughs. The study uncovers pricing patterns, host behaviour, room type distributions, neighbourhood demand, and review trends, with the cleaned data exported to power an 11-sheet interactive Tableau workbook.
 
